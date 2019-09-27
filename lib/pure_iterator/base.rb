@@ -3,6 +3,12 @@ require 'nokogiri'
 
 module PureIterator
   class Base
+    # @param config [Hash]
+    # @option config [String] :host Pure host
+    # @option config [String] :username Username of the Pure host account
+    # @option config [String] :password Password of the Pure host account
+    # @option config [String] :api_key API key of the Pure host account
+    # @option config [Integer] :api_version Pure API version
     def initialize(config)
       http_client = HTTP::Client.new
       http_client = http_client.headers({ 'api-key' => config[:api_key] })
@@ -13,12 +19,17 @@ module PureIterator
       accept :xml
     end
 
+    # Set the response Accept type
+    # @param accept [Symbol]
     def accept(accept)
       supported_accept = [:xml, :json]
       raise "Supported Accept values #{supported_accept}" unless supported_accept.include? accept
       @accept = accept
     end
 
+    # Traverse a collection, doing something with each response (which may contain multiple records if size parameter used)
+    # @param params [Hash] Pure POST parameters (except page and pageSize)
+    # @return [String] 'done' when collection has been traversed
     def iterate(params = {})
       @http_client = @http_client.headers({ 'Accept' => "application/xml" })
       default_count_params = {size: 0}

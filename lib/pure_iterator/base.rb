@@ -67,12 +67,14 @@ module PureIterator
       doc.xpath('/result/count').text.to_i
     end
 
-    # implement me
+    # @return [String] Pure POST endpoint
     def post_endpoint
+      # implement me
     end
 
-    # implement me
+    # @param response [HTTP::Response]
     def act(response)
+      # implement me
     end
   end
 end

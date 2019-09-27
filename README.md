@@ -49,7 +49,7 @@ class Foo < PureIterator::Base
 end
 
 iterator = Foo.new config
-iterator.accept :json # default is xml
+iterator.accept :json # default is :xml
 params = {size: 20} # for pagination, use size and offset
 iterator.iterate params
 ```

@@ -33,10 +33,11 @@ module PureIterator
     def iterate(params = {})
       @http_client = @http_client.headers({ 'Accept' => "application/xml" })
       default_count_params = {size: 0}
-      options = params.dup
-      options.delete :page
-      options.delete :pageSize
-      response = @http_client.post url, json: default_count_params.merge(options)
+      count_options = params.dup
+      count_options.delete :size
+      count_options.delete :page
+      count_options.delete :pageSize
+      response = @http_client.post url, json: default_count_params.merge(count_options)
       if response.code === 200
         record_count = count response
       else
@@ -44,13 +45,14 @@ module PureIterator
       end
       @http_client = @http_client.headers({ 'Accept' => "application/#{@accept}" })
       default_query_params = {size: 1, offset: 0}
-      query_params = default_query_params.merge(options)
-      size = query_params[:size]
-      offset = query_params[:offset]
-      while offset < record_count
-        response = @http_client.post url, json: {size: size, offset: offset}
+      query_options = params.dup
+      query_options.delete :page
+      query_options.delete :pageSize
+      query_params = default_query_params.merge(query_options)
+      while query_params[:offset] < record_count
+        response = @http_client.post url, json: query_params
         act response
-        offset += size
+        query_params[:offset] += query_params[:size]
       end
       'done'
     end
@@ -69,12 +71,12 @@ module PureIterator
 
     # @return [String] Pure POST endpoint
     def post_endpoint
-      # implement me
+      raise "#{self.class.name}##{__method__} not implemented"
     end
 
     # @param response [HTTP::Response]
     def act(response)
-      # implement me
+      raise "#{self.class.name}##{__method__} not implemented"
     end
   end
 end

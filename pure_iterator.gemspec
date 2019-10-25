@@ -8,12 +8,12 @@ Gem::Specification.new do |spec|
   spec.version       = PureIterator::VERSION
   spec.authors       = ["Adrian Albin-Clark"]
   spec.email         = ["a.albin-clark@lancaster.ac.uk"]
-
-  spec.summary       = %q{A flexible way to access records in the Pure Research Information System.}
+  spec.summary       = %q{A flexible way to process records in the Pure Research Information System.}
+  spec.metadata = {
+    'source_code_uri' => "https://github.com/lulibrary/#{spec.name}",
+    "documentation_uri" => "https://www.rubydoc.info/gems/#{spec.name}/#{spec.version}",
+  }
   spec.license       = "MIT"
-
-  # Specify which files should be added to the gem when it is released.
-  # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
   spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   end

@@ -31,6 +31,22 @@ module PureIterator
     # @param params [Hash] Pure POST parameters (except page and pageSize)
     # @return [String] 'done' when collection has been traversed
     def iterate(params = {})
+      query_record_count = count(params)
+      @http_client = @http_client.headers({ 'Accept' => "application/#{@accept}" })
+      default_query_params = {size: 1, offset: 0}
+      query_options = params.dup
+      query_options.delete :page
+      query_options.delete :pageSize
+      query_params = default_query_params.merge(query_options)
+      while query_params[:offset] < query_record_count
+        response = @http_client.post url, json: query_params
+        act response
+        query_params[:offset] += query_params[:size]
+      end
+      'done'
+    end
+
+    def count(params = {})
       @http_client = @http_client.headers({ 'Accept' => "application/xml" })
       default_count_params = {size: 0}
       count_options = params.dup
@@ -39,22 +55,10 @@ module PureIterator
       count_options.delete :pageSize
       response = @http_client.post url, json: default_count_params.merge(count_options)
       if response.code === 200
-        record_count = count response
+        count_from_xml response
       else
         raise response
       end
-      @http_client = @http_client.headers({ 'Accept' => "application/#{@accept}" })
-      default_query_params = {size: 1, offset: 0}
-      query_options = params.dup
-      query_options.delete :page
-      query_options.delete :pageSize
-      query_params = default_query_params.merge(query_options)
-      while query_params[:offset] < record_count
-        response = @http_client.post url, json: query_params
-        act response
-        query_params[:offset] += query_params[:size]
-      end
-      'done'
     end
 
     private
@@ -63,7 +67,7 @@ module PureIterator
       File.join 'https://', @host, 'ws', 'api', @api_version.to_s, post_endpoint
     end
 
-    def count(xml)
+    def count_from_xml(xml)
       doc = Nokogiri::XML xml
       doc.remove_namespaces!
       doc.xpath('/result/count').text.to_i

@@ -1,10 +1,6 @@
 # Pure Iterator
 
-A flexible way to access records in the Pure Research Information System.
-
-Features:
-* Enables you to focus upon doing things with data, not getting it
-* Uses HTTP POST method 
+A flexible way to process records in the Pure Research Information System.
 
 ## Installation
 
@@ -23,9 +19,17 @@ Or install it yourself as:
     $ gem install pure_iterator
 
 ## Usage
-* Subclass ```PureIterator::Base```
-* State the Pure POST endpoint to use in ```#post_endpoint```
-* Define what to do with the response in ```#act```
+```ruby
+class Foo < PureIterator::Base
+  def act(response)
+    # do something
+  end
+
+  def post_endpoint
+    'persons'
+  end
+end
+```
 
 ```ruby
 def config
@@ -36,16 +40,6 @@ def config
     api_key:  'YOUR_PURE_API_KEY',
     api_version: 514
   }
-end
-
-class Foo < PureIterator::Base
-  def act(response)
-    # do something
-  end
-
-  def post_endpoint
-    'persons'
-  end
 end
 
 iterator = Foo.new config

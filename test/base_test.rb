@@ -14,9 +14,18 @@ class Foo < PureIterator::Base
   def post_endpoint
     'organisational-units'
   end
+
+  def act(response)
+  end
 end
 
-class TestIterate < Minitest::Test
+class TestBase < Minitest::Test
+  def test_count
+    iterator = Foo.new config
+    result = iterator.count
+    assert_instance_of Integer, result
+  end
+
   def test_iterate_accept_xml
     iterator = Foo.new config
     params = {size: 50}

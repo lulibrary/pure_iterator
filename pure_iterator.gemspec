@@ -21,6 +21,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'minitest-reporters', '~> 1.1'
 
-  spec.add_dependency 'http', '~> 3.0'
+  spec.add_dependency 'http', '~> 4.0'
   spec.add_dependency 'nokogiri', '~> 1.6'
 end

@@ -10,12 +10,16 @@ module PureIterator
     # @option config [String] :api_key API key of the Pure host account
     # @option config [Integer] :api_version Pure API version
     def initialize(config)
+      required = [:host, :username, :password, :api_key, :api_version]
+      required.each do |r|
+        raise ArgumentError, "Pure #{r} not set" unless config[r] && !config[r].to_s.empty?
+      end
       http_client = HTTP::Client.new
       http_client = http_client.headers({ 'api-key' => config[:api_key] })
       http_client = http_client.basic_auth({user: config[:username], pass: config[:password]})
       @http_client = http_client
       @host = config[:host]
-      @api_version = config[:api_version]
+      @api_version = config[:api_version].to_s
       accept :xml
     end
 
@@ -64,7 +68,7 @@ module PureIterator
     private
 
     def url
-      File.join 'https://', @host, 'ws', 'api', @api_version.to_s, post_endpoint
+      File.join 'https://', @host, 'ws', 'api', @api_version, post_endpoint
     end
 
     def count_from_xml(xml)

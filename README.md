@@ -2,6 +2,10 @@
 
 A flexible way to process records in the Pure Research Information System.
 
+## Status
+[![Gem Version](https://badge.fury.io/rb/pure_iterator.svg)](https://badge.fury.io/rb/pure_iterator)
+[![Maintainability](https://api.codeclimate.com/v1/badges/3dc9b9bd06dd42350843/maintainability)](https://codeclimate.com/github/lulibrary/pure_iterator/maintainability)
+
 ## Installation
 
 Add this line to your application's Gemfile:
